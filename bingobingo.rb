@@ -21,6 +21,8 @@ require 'rubytools'
 require 'array_table'
 require 'arraycsv'
 
+BINGO_BANNER="\n .:* B  I  N  G  O  !! *:.\n" * 2
+
 def process(card_file)
   card = ArrayCSV.new(card_file)
   draw = ArrayCSV.new('bingo_draw.csv')
@@ -80,7 +82,6 @@ def pattern_compare(current)
       current[i][j].is_a?(String) && !e.nil? ? e : nil
     end
   end
-  result.prepend(Array.new(5){' '})
   [result, target.dataframe]
 end
 
@@ -99,10 +100,10 @@ Thread.new do
   result, target = pattern_compare(marked_card)
   print 'RESULT '
   puts  Time.now.strftime '%X'
-  marked_card+=result
+  marked_card+=result.dup.prepend(Array.new(5){' '}) # just a line spacer
   puts marked_card.to_table delimeter: '  '
 
-  puts 'B I N G O ! ' * 3 if result.to_table == target.to_table
+  puts BINGO_BANNER if result == target
 end.join
 
 puts '-' * 30
