@@ -20,7 +20,6 @@
 require 'rubytools'
 require 'array_table'
 require 'arraycsv'
-require 'ansi_color'
 
 def process(card_file)
   card = ArrayCSV.new(card_file)
@@ -81,6 +80,7 @@ def pattern_compare(current)
       current[i][j].is_a?(String) && !e.nil? ? e : nil
     end
   end
+  result.prepend(Array.new(5){' '})
   [result, target.dataframe]
 end
 
@@ -91,14 +91,16 @@ init
 bingo_card_csv = ARGV.first
 exit unless bingo_card_csv
 
-df2 = process(bingo_card_csv)
+marked_card = process(bingo_card_csv)
 
-puts df2.to_table delimeter: '  '
+# puts marked_card.to_table delimeter: '  '
 
 Thread.new do
-  result, target = pattern_compare(df2)
-  puts 'RESULT'
-  puts result.to_table delimeter: '  '
+  result, target = pattern_compare(marked_card)
+  print 'RESULT '
+  puts  Time.now.strftime '%X'
+  marked_card+=result
+  puts marked_card.to_table delimeter: '  '
 
   puts 'B I N G O ! ' * 3 if result.to_table == target.to_table
 end.join
