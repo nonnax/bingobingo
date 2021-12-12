@@ -13,7 +13,7 @@
 #
 # bingo play files created on start-up:
 #
-# bingo_draw.csv, current nunber calls go here
+# bingo_draw.csv, current number calls go here
 # bingo000.csv, create numbered bingo cards based on this template. filename: bingo001.csv etc
 # bingo_pattern.csv, setup the bingo pattern to watch
 #
@@ -72,6 +72,8 @@ def init
 
   bdraw = 'bingo_draw.csv'
   File.write(bdraw, '') unless File.exist?(bdraw)
+  puts File.read('README.md')
+  puts "Let's Play Bingo!"
 end
 
 def pattern_compare(current)
